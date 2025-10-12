@@ -18,7 +18,7 @@ func isStructPointer[T any](obj *T) error {
 	return nil
 }
 
-func updateFieldByName(v reflect.Value, name string, value any) error {
+func updateField(v reflect.Value, name string, value any) error {
 	field := v.FieldByName(name)
 	if !field.IsValid() {
 		return fmt.Errorf("no such field: %s", name)
