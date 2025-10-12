@@ -10,11 +10,11 @@ func Filter[T any](input []T, predicate func(T) bool) []T {
 	return result
 }
 
-func Contains[T comparable](slice []T, val T) bool {
-	for _, item := range slice {
+func Contains[T comparable](slice []T, val T) int {
+	for i, item := range slice {
 		if item == val {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
 }
