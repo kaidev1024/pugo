@@ -5,33 +5,21 @@ import (
 	"reflect"
 )
 
-func SetFieldByName(obj interface{}, name string, value interface{}) error {
-	v := reflect.ValueOf(obj)
-	if v.Kind() != reflect.Ptr || v.IsNil() {
-		return fmt.Errorf("must pass a pointer to struct")
+func UpdateFieldByName[T any](obj *T, name string, value any) error {
+	if err := isStructPointer(obj); err != nil {
+		return err
 	}
+	return updateFieldByName(reflect.ValueOf(obj).Elem(), name, value)
+}
 
-	v = v.Elem()
-	if v.Kind() != reflect.Struct {
-		return fmt.Errorf("must point to a struct")
+func UpdateFieldsByName[T any](obj *T, updates map[string]any) error {
+	if err := isStructPointer(obj); err != nil {
+		return err
 	}
-
-	field := v.FieldByName(name)
-	if !field.IsValid() {
-		return fmt.Errorf("no such field: %s", name)
+	for name, value := range updates {
+		if err := updateFieldByName(reflect.ValueOf(obj).Elem(), name, value); err != nil {
+			return fmt.Errorf("cannot update %s, %w", name, err)
+		}
 	}
-	if !field.CanSet() {
-		return fmt.Errorf("cannot set field %s", name)
-	}
-
-	val := reflect.ValueOf(value)
-
-	// Check type compatibility
-	if field.Type() != val.Type() {
-		return fmt.Errorf("provided value type (%s) didn't match object field type (%s)",
-			val.Type(), field.Type())
-	}
-
-	field.Set(val)
 	return nil
 }
