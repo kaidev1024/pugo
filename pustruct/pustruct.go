@@ -67,3 +67,27 @@ func UpdateFieldsWithStrings[T any](target *T, data map[string]string) error {
 
 	return nil
 }
+
+func GetFields[T any](v *T) []any {
+	val := reflect.ValueOf(v)
+	typ := reflect.TypeOf(v)
+
+	// Handle pointer to struct
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+		typ = typ.Elem()
+	}
+
+	if val.Kind() != reflect.Struct {
+		panic("GetFields: input is not a struct")
+	}
+
+	var result []any
+	for i := 0; i < val.NumField(); i++ {
+		field := typ.Field(i)
+		value := val.Field(i).Interface()
+		result = append(result, field.Name, value)
+	}
+
+	return result
+}
