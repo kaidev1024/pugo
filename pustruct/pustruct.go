@@ -68,6 +68,7 @@ func UpdateFieldsWithStrings[T any](target *T, data map[string]string) error {
 	return nil
 }
 
+// TODO: add options to exclude fields such as keys
 func GetFields[T any](v *T) []any {
 	val := reflect.ValueOf(v)
 	typ := reflect.TypeOf(v)
