@@ -66,7 +66,7 @@ func UpdateFieldsWithStrings[T any](target *T, data map[string]string) error {
 		switch kind {
 		case reflect.String:
 			field.Set(reflect.ValueOf(strVal).Convert(fieldType))
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 			if intVal, err := strconv.ParseInt(strVal, 10, 64); err == nil {
 				field.Set(reflect.ValueOf(intVal).Convert(fieldType))
 			}
