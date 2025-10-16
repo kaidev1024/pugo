@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"time"
+
+	"github.com/gocql/gocql"
 )
 
 func UpdateField[T any](obj *T, name string, value any) error {
@@ -46,6 +49,19 @@ func UpdateFieldsWithStrings[T any](target *T, data map[string]string) error {
 
 		fieldType := field.Type()
 		kind := fieldType.Kind()
+
+		switch fieldType {
+		case reflect.TypeOf(gocql.UUID{}):
+			if uuidVal, err := gocql.ParseUUID(strVal); err == nil {
+				field.Set(reflect.ValueOf(uuidVal))
+				continue
+			}
+		case reflect.TypeOf(time.Time{}):
+			if tVal, err := time.Parse(time.RFC3339, strVal); err == nil {
+				field.Set(reflect.ValueOf(tVal))
+				continue
+			}
+		}
 
 		switch kind {
 		case reflect.String:
