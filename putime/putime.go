@@ -2,6 +2,7 @@ package putime
 
 import (
 	"errors"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -76,6 +77,35 @@ func GetDateCoord(curDate, firstDate time.Time) (int, int) {
 
 func NowUTC() time.Time {
 	return time.Now().UTC()
+}
+
+func GetTimeString(hours, minutes, seconds, subsecs uint8) string {
+	if hours == 0 && minutes == 0 && seconds == 0 && subsecs == 0 {
+		return "0"
+	}
+
+	parts := []string{}
+
+	if hours > 0 {
+		parts = append(parts, strconv.Itoa(int(hours)))
+	}
+
+	if minutes > 0 || len(parts) > 0 {
+		parts = append(parts, fmt.Sprintf("%02d", minutes))
+	}
+
+	sec := fmt.Sprintf("%02d", seconds)
+
+	// handle subsecs
+	if subsecs > 0 {
+		sub := fmt.Sprintf("%02d", subsecs)
+		sub = strings.TrimRight(sub, "0")
+		sec = sec + "." + sub
+	}
+
+	parts = append(parts, sec)
+
+	return strings.Join(parts, ":")
 }
 
 // currentTime := util.NowUTC()
