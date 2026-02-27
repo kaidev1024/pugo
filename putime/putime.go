@@ -79,7 +79,7 @@ func NowUTC() time.Time {
 	return time.Now().UTC()
 }
 
-func GetTimeString(hours, minutes, seconds, subsecs uint8) string {
+func GetTimeString(hours, minutes, seconds, subsecs int8) string {
 	if hours == 0 && minutes == 0 && seconds == 0 && subsecs == 0 {
 		return "0"
 	}
