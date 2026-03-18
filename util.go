@@ -9,8 +9,8 @@ func GetFullName(firstName, lastName string) string {
 	return firstName + " " + lastName
 }
 
-func TrimScore(score float32) string {
-	return strings.TrimRight(strings.TrimRight(fmt.Sprintf("%.2f", score), "0"), ".")
+func TrimFloat(f float32) string {
+	return strings.TrimRight(strings.TrimRight(fmt.Sprintf("%.2f", f), "0"), ".")
 }
 
 func NormalizeString(s string) string {
